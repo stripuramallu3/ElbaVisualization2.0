@@ -4,8 +4,8 @@ Updated ElbaVisualization Repo
 Use Python3 with pip3
 
 Python Dependencies: 
-	pip3 install datetime
-	pip3 install bs4
+	pip3 install datetime,
+	pip3 install bs4,
 	pip3 install lxml
 
 Initialize SimpleHTTPServer in directory of index.html file: 

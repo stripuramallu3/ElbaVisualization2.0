@@ -7,7 +7,7 @@ function setTimes(var_min, var_max, step) {
 } 
 function setWorkload(var_min, var_max) {
     var workloads = []
-    for (var i = var_max; i >= var_min; i -= 1000) {
+    for (var i = var_max; i > (var_max/1000 - (workloads_set.size)) * 1000; i -= 1000) {
         workloads.push(i); 
     }
     iterator = workloads_set.values()

@@ -10,6 +10,15 @@ function setWorkload(var_min, var_max) {
     for (var i = var_max; i >= var_min; i -= 1000) {
         workloads.push(i); 
     }
+    iterator = workloads_set.values()
+    temp = []
+    for (var i = 0; i < workloads_set.size; i++) {
+        temp.push(iterator.next().value) 
+    }
+    temp.sort(function(a, b){return b - a})
+    for (var i = 0; i < temp.length; i++) {
+        workloads_map.set(workloads[i], temp[i])
+    }
     return workloads
 }
 
@@ -40,6 +49,9 @@ var margin = { top: 100, right: 0, bottom: 500, left: 70 },
     factorsCount = 0
     timestampInterval *= factors[factorsCount++]
     times = setTimes(time_min, time_max, timestampInterval)
+    workloads_set = new Set();
+    workloads_map = new Map(); 
+
 
 var svg = d3.select("#heat").append("svg")
             .attr("width", width + margin.left + margin.right)
@@ -60,6 +72,7 @@ var heatmapChart = function(tsvFile) {
             } else if (w > workload_max) {
                 workload_max = w; 
             }
+            workloads_set.add(w)
             if (t >= time_min && t <= time_max) {
                 for (var j = 0; j < times.length; j++) {
                     if (times[j] == t) {
@@ -73,13 +86,12 @@ var heatmapChart = function(tsvFile) {
             }
         },
     function (error, data) {
-        console.log(workload_min)
         workloads = setWorkload(workload_min, workload_max)
         workload_int = workload_max/1000; 
         var workloadLabels = svg.selectAll(".colLabelg")
             .data(workloads)
             .enter().append("text")
-            .text(function(d) {return d;})
+            .text(function(d) {return workloads_map.get(d);})
             .attr("x", 0)
             .attr("y", function(d, i) {return (i * gridSize) - (gridSize/2);})
             //.attr("dy", "0.75em")
@@ -266,6 +278,7 @@ var heatmapChart = function(tsvFile) {
                 timestampList.push(selectedRectangles[i].__data__.timestamp)
                 selectedWorkload = Math.min(selectedWorkload, selectedRectangles[i].__data__.workload)
              }
+             selectedWorkload = workloads_map.get(selectedWorkload)
              timestampList.sort(function(a, b){return a - b})
              if (timestampList.length >= 2 && timestampInterval != 50) {
                  time_min = timestampList[0]

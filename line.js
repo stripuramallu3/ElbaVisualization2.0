@@ -16,7 +16,7 @@ function plotGraph(div_id, workload, timestamp_min, timestamp_max, csv_file, typ
       d.value = +d.total_http;
       d.type = d.type; 
       d.workload = +d.workload
-      d.epoc_time = format(new Date(+d.epoc_time))
+      //d.epoc_time = format(new Date(+d.epoc_time))
       if (d.timestamp >= timestamp_min && d.timestamp <= timestamp_max && d.workload == workload && d.type == type) {
         return d; 
       }
